@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 12px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', ui-sans-serif, system-ui;
+  background: linear-gradient(135deg, #FFF9F0 0%, #FEF9F0 100%);
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer;
+}
+
+.btn-primary {
+  @apply bg-gradient-to-r from-roti-600 to-roti-500 text-white hover:shadow-lg hover:scale-105 focus:ring-roti-400;
+}
+
+.btn-secondary {
+  @apply bg-white text-roti-700 border-2 border-roti-200 hover:bg-roti-50 hover:border-roti-300 focus:ring-roti-200;
+}
+
+.btn-outline {
+  @apply bg-transparent text-roti-600 border-2 border-roti-600 hover:bg-roti-50 focus:ring-roti-400;
+}
+
+.card {
+  @apply rounded-2xl border border-roti-100 bg-white shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+/* 3D Transforms */
+.perspective {
+  perspective: 1000px;
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-roti-600 to-roti-500 bg-clip-text text-transparent;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff9827;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e67e0d;
+}
