@@ -1,4 +1,5 @@
 import React from 'react'
+import Logo from './Logo'
 
 const links = [
   { href: '#home', label: 'Beranda' },
@@ -13,9 +14,8 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-800 text-white">
       <div className="container flex h-16 items-center justify-between">
-        <a href="#home" className="flex items-center gap-2 font-semibold">
-          <span className="text-2xl">☕</span>
-          <span>KopiItem</span>
+        <a href="#home" className="flex items-center" aria-label="KopiItem Home">
+          <Logo size={120} className="h-10 w-auto md:h-12" />
         </a>
         <nav className="hidden md:flex items-center gap-8">
           {links.map(l => (
@@ -42,3 +42,4 @@ export default function Navbar() {
     </header>
   )
 }
+
