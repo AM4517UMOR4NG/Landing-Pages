@@ -202,4 +202,4 @@ Untuk pertanyaan atau bantuan, hubungi tim development.
 
 ---
 
-**Dibuat dengan ❤️ untuk ElBengkel**
+**Dibuat dengan untuk ElBengkel**
