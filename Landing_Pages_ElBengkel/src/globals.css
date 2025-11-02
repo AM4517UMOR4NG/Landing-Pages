@@ -10,12 +10,14 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #000; /* prevent white seams at edges */
   color: #333;
+  overflow-x: hidden;
 }
 
 /* 3D Effects */
