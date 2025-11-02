@@ -14,7 +14,7 @@ export default function Header() {
   ]
 
   return (
-    <header className="fixed w-full top-0 z-50 bg-white shadow-lg">
+    <header className="fixed w-full top-0 z-50 bg-gradient-to-r from-[#FF6B35] to-[#004E89] shadow-lg">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -27,7 +27,7 @@ export default function Header() {
             <div className="gradient-primary p-2 rounded-lg">
               <Wrench className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">ElBengkel</span>
+            <span className="text-2xl font-bold text-white">ElBengkel</span>
           </motion.div>
 
           {/* Desktop Menu */}
@@ -39,7 +39,7 @@ export default function Header() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="text-gray-700 hover:text-primary font-medium transition-colors"
+                className="text-white/90 hover:text-white font-semibold transition-colors hover:underline underline-offset-8 decoration-white/60"
               >
                 {item.name}
               </motion.a>
@@ -51,7 +51,7 @@ export default function Header() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="hidden md:block gradient-primary text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-shadow"
+            className="hidden md:block px-6 py-2 rounded-lg font-semibold bg-white/20 text-white border border-white/30 backdrop-blur-sm hover:bg-white hover:text-[#004E89] hover:shadow-xl transition-all"
           >
             Hubungi Kami
           </motion.button>
@@ -59,7 +59,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-gray-700"
+            className="md:hidden text-white"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -71,19 +71,19 @@ export default function Header() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="md:hidden pb-4"
+            className="md:hidden pb-4 bg-white/10 rounded-lg mt-2 backdrop-blur-sm"
           >
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="block py-2 text-gray-700 hover:text-primary"
+                className="block py-2 px-2 text-white/90 hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}
               </a>
             ))}
-            <button className="w-full mt-4 gradient-primary text-white py-2 rounded-lg font-medium">
+            <button className="w-full mt-4 text-white py-2 rounded-lg font-semibold bg-white/20 border border-white/30 hover:bg-white hover:text-[#004E89] transition-all">
               Hubungi Kami
             </button>
           </motion.div>
