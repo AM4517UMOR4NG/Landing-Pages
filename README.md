@@ -1,8 +1,3 @@
-Bagus — saya buatkan **3 README singkat, rapi, dan siap di-paste ke GitHub** untuk masing-masing project: **ElBengkel**, **KopiItem**, dan **RotiFreeza**.
-Semua README ditulis dalam Bahasa Indonesia, memakai gaya GitHub profesional dan ringkas: badge placeholders, fitur, instalasi singkat, struktur folder, customisasi, lisensi & kontak.
-
-Salin salah satu / semua blok di bawah dan tempel ke `README.md` masing-masing repo kamu.
-
 ---
 
 ````markdown
