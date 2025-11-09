@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🚀 Landing Pages Collection
 
 Koleksi landing pages modern dan responsif yang dibangun dengan React, Vite, dan TailwindCSS. Repository ini berisi berbagai template landing page untuk berbagai jenis bisnis dengan desain yang menarik dan interaktif.
