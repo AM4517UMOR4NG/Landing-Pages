@@ -7,7 +7,8 @@ import Advertisement from './components/Advertisement'
 import ParallaxSection from './components/ParallaxSection'
 import PhotoGallery from './components/PhotoGallery'
 import Stats from './components/Stats'
-import Testimonials from './components/Testimonials'
+import PricingCalculator from './components/PricingCalculator'
+import BeforeAfterShowcase from './components/BeforeAfterShowcase'
 import CTA from './components/CTA'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -24,7 +25,8 @@ export default function App() {
       <ParallaxSection />
       <PhotoGallery />
       <Stats />
-      <Testimonials />
+      <PricingCalculator />
+      <BeforeAfterShowcase />
       <CTA />
       <Contact />
       <Footer />
