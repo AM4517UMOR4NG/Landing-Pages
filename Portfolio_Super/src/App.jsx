@@ -37,10 +37,10 @@ export default function App() {
   useEffect(() => {
     // Detect mobile device for performance optimization
     const isMobile = window.innerWidth <= 768
-    const isLowEnd = navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 4
+    const isLowEnd = navigator.hardwareConcurrency <= 4 || (navigator.deviceMemory && navigator.deviceMemory <= 4)
     
-    // Create particles - reduced on mobile/low-end devices
-    const particleCount = isMobile || isLowEnd ? 20 : 50
+    // Create particles - drastically reduced on mobile/low-end devices
+    const particleCount = isMobile || isLowEnd ? 10 : 50
     const newParticles = Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       x: Math.random() * window.innerWidth,
@@ -52,8 +52,8 @@ export default function App() {
     }))
     setParticles(newParticles)
 
-    // Create crazy particles for navbar expansion - reduced on mobile
-    const crazyParticleCount = isMobile || isLowEnd ? 30 : 100
+    // Create crazy particles for navbar expansion - drastically reduced on mobile
+    const crazyParticleCount = isMobile || isLowEnd ? 10 : 100
     const newCrazyParticles = Array.from({ length: crazyParticleCount }, (_, i) => ({
       id: `crazy-${i}`,
       x: Math.random() * window.innerWidth,
@@ -68,8 +68,8 @@ export default function App() {
     }))
     setCrazyParticles(newCrazyParticles)
 
-    // Create space stars - reduced on mobile
-    const starCount = isMobile || isLowEnd ? 50 : 200
+    // Create space stars - drastically reduced on mobile
+    const starCount = isMobile || isLowEnd ? 20 : 200
     const newStars = Array.from({ length: starCount }, (_, i) => ({
       id: `star-${i}`,
       x: Math.random() * window.innerWidth,
@@ -81,8 +81,8 @@ export default function App() {
     }))
     setStars(newStars)
 
-    // Create floating planets - reduced on mobile
-    const planetCount = isMobile || isLowEnd ? 2 : 5
+    // Create floating planets - disabled on mobile for performance
+    const planetCount = isMobile || isLowEnd ? 0 : 5
     const newPlanets = Array.from({ length: planetCount }, (_, i) => ({
       id: `planet-${i}`,
       x: Math.random() * window.innerWidth,
@@ -97,8 +97,8 @@ export default function App() {
     }))
     setPlanets(newPlanets)
 
-    // Create comets - reduced on mobile
-    const cometCount = isMobile || isLowEnd ? 1 : 3
+    // Create comets - disabled on mobile for performance
+    const cometCount = isMobile || isLowEnd ? 0 : 3
     const newComets = Array.from({ length: cometCount }, (_, i) => ({
       id: `comet-${i}`,
       x: Math.random() * window.innerWidth,
@@ -112,6 +112,8 @@ export default function App() {
     setComets(newComets)
 
     const handleMouseMove = (e) => {
+      // Throttle mouse move for performance
+      if (isMobile) return
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
@@ -147,23 +149,27 @@ export default function App() {
           })))
         }
 
-        // Animate planets - slower on mobile (skip every other frame)
-        frameSkip++
-        if (!isMobile || frameSkip % 2 === 0) {
-          setPlanets(prev => prev.map(p => ({
+        // Animate planets - skip on mobile for performance
+        if (!isMobile) {
+          frameSkip++
+          if (frameSkip % 2 === 0) {
+            setPlanets(prev => prev.map(p => ({
+              ...p,
+              x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+              y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+              rotation: p.rotation + p.rotationSpeed,
+            })))
+          }
+        }
+
+        // Animate comets - skip on mobile for performance
+        if (!isMobile) {
+          setComets(prev => prev.map(p => ({
             ...p,
             x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
             y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-            rotation: p.rotation + p.rotationSpeed,
           })))
         }
-
-        // Animate comets
-        setComets(prev => prev.map(p => ({
-          ...p,
-          x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-          y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-        })))
         
         lastTime = currentTime
       }
@@ -882,11 +888,16 @@ export default function App() {
       {/* Navbar with Tree Root Animation */}
       <motion.nav 
         className={`navbar ${isNavbarExpanded ? 'navbar-expanded' : ''}`}
-        initial={{ y: -100, opacity: 0 }}
+        initial={window.innerWidth <= 768 ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, type: "spring", stiffness: 80 }}
-        onClick={toggleNavbarExpansion}
-        style={{ cursor: 'pointer' }}
+        onClick={(e) => {
+          // Only toggle expansion on desktop, not mobile
+          if (window.innerWidth > 768) {
+            toggleNavbarExpansion()
+          }
+        }}
+        style={{ cursor: window.innerWidth > 768 ? 'pointer' : 'default' }}
       >
         {/* Enhanced Tree Root Background Effect */}
         <div className="navbar-roots">
