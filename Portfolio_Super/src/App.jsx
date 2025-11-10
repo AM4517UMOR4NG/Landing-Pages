@@ -910,7 +910,21 @@ export default function App() {
             toggleNavbarExpansion()
           }
         }}
-        style={{ cursor: window.innerWidth > 768 ? 'pointer' : 'default' }}
+        style={{ 
+          cursor: window.innerWidth > 768 ? 'pointer' : 'default',
+          ...(window.innerWidth <= 768 && {
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10000,
+            width: '100%',
+            backgroundColor: 'rgba(10, 10, 10, 0.98)'
+          })
+        }}
       >
         {/* Enhanced Tree Root Background Effect */}
         <div className="navbar-roots">
