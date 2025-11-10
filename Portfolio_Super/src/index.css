@@ -84,6 +84,31 @@ body {
   .cinematic-effects-layer {
     display: none;
   }
+  
+  /* Disable all heavy animations */
+  * {
+    animation-duration: 0.01ms !important;
+    animation-delay: -0.01ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: -0.01ms !important;
+  }
+  
+  /* Keep only essential transitions */
+  .nav-links,
+  .mobile-menu-btn,
+  .nav-link {
+    transition: all 0.3s ease !important;
+  }
+  
+  /* Disable particles animation */
+  .particles-container {
+    display: none !important;
+  }
+  
+  /* Simplify background */
+  .bg-layers {
+    display: none;
+  }
 }
 
 .app {

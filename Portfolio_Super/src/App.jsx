@@ -128,29 +128,30 @@ export default function App() {
     let animationFrameId
     let lastTime = 0
     let frameSkip = 0
-    const targetFPS = isMobile || isLowEnd ? 30 : 60
+    const targetFPS = isMobile || isLowEnd ? 20 : 60  // Even lower FPS on mobile
     const frameInterval = 1000 / targetFPS
     
-    const animateParticles = (currentTime) => {
-      if (currentTime - lastTime >= frameInterval) {
-        setParticles(prev => prev.map(p => ({
-          ...p,
-          x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-          y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-        })))
-        
-        // Animate crazy particles only when navbar is expanded
-        if (isNavbarExpanded) {
-          setCrazyParticles(prev => prev.map(p => ({
+    // Skip animation entirely on very low-end devices
+    if (!isMobile && !isLowEnd) {
+      const animateParticles = (currentTime) => {
+        if (currentTime - lastTime >= frameInterval) {
+          setParticles(prev => prev.map(p => ({
             ...p,
             x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-            y: (p.y + p.speedY) % (window.innerHeight + 200),
-            rotation: (p.rotation || 0) + p.rotationSpeed,
+            y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
           })))
-        }
+          
+          // Animate crazy particles only when navbar is expanded
+          if (isNavbarExpanded) {
+            setCrazyParticles(prev => prev.map(p => ({
+              ...p,
+              x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+              y: (p.y + p.speedY) % (window.innerHeight + 200),
+              rotation: (p.rotation || 0) + p.rotationSpeed,
+            })))
+          }
 
-        // Animate planets - skip on mobile for performance
-        if (!isMobile) {
+          // Animate planets - skip every other frame
           frameSkip++
           if (frameSkip % 2 === 0) {
             setPlanets(prev => prev.map(p => ({
@@ -160,23 +161,35 @@ export default function App() {
               rotation: p.rotation + p.rotationSpeed,
             })))
           }
-        }
 
-        // Animate comets - skip on mobile for performance
-        if (!isMobile) {
+          // Animate comets
           setComets(prev => prev.map(p => ({
             ...p,
             x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
             y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
           })))
+          
+          lastTime = currentTime
         }
         
-        lastTime = currentTime
+        animationFrameId = requestAnimationFrame(animateParticles)
       }
-      
+      animationFrameId = requestAnimationFrame(animateParticles)
+    } else {
+      // On mobile/low-end: only animate particles occasionally
+      const animateParticles = (currentTime) => {
+        if (currentTime - lastTime >= frameInterval * 3) {  // Update 3x slower
+          setParticles(prev => prev.map(p => ({
+            ...p,
+            x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+            y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+          })))
+          lastTime = currentTime
+        }
+        animationFrameId = requestAnimationFrame(animateParticles)
+      }
       animationFrameId = requestAnimationFrame(animateParticles)
     }
-    animationFrameId = requestAnimationFrame(animateParticles)
 
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('scroll', handleScroll)
