@@ -41,7 +41,36 @@ body {
   backface-visibility: hidden;
 }
 
-@media (max-width: 768px) {
+/* ============================================
+   MOBILE NAVBAR - PRIORITAS TERTINGGI
+   ============================================ */
+@media screen and (max-width: 768px) {
+  /* NAVBAR HARUS SELALU TERLIHAT - TIDAK BOLEH DISEMBUNYIKAN */
+  nav.navbar,
+  .navbar,
+  [class*="navbar"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 99999 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-height: 70px !important;
+    height: auto !important;
+    padding: 1rem 0 !important;
+    margin: 0 !important;
+    background: rgba(10, 10, 10, 0.98) !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    transform: translateY(0) !important;
+  }
+  
   .particle,
   .crazy-particle,
   .star,
@@ -67,7 +96,7 @@ body {
   /* Simplify navbar animations */
   .navbar-roots,
   .root-svg {
-    display: none;
+    display: none !important;
   }
   
   /* Disable cursor glow on mobile */
@@ -75,18 +104,13 @@ body {
     display: none;
   }
   
-  /* Reduce backdrop blur for performance */
-  .navbar {
-    backdrop-filter: blur(10px) !important;
-  }
-  
   /* Simplify cinematic effects */
   .cinematic-effects-layer {
     display: none;
   }
   
-  /* Disable all heavy animations */
-  * {
+  /* Disable all heavy animations - kecuali navbar */
+  *:not(.navbar):not(.nav-container):not(.mobile-menu-btn):not(.nav-links):not(.nav-link):not(.logo) {
     animation-duration: 0.01ms !important;
     animation-delay: -0.01ms !important;
     transition-duration: 0.01ms !important;
@@ -108,6 +132,18 @@ body {
   /* Simplify background */
   .bg-layers {
     display: none;
+  }
+  
+  /* Pastikan hero section tidak menutupi navbar */
+  .hero {
+    padding-top: 90px !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Pastikan tidak ada elemen yang menutupi navbar */
+  body > *:not(.navbar) {
+    position: relative;
+    z-index: 1;
   }
 }
 
