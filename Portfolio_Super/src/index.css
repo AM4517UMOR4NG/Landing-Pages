@@ -2730,3 +2730,56 @@ body {
     height: 32px;
   }
 }
+
+/* ============================================
+   FINAL OVERRIDE - NAVBAR MOBILE HARUS TERLIHAT
+   ============================================ */
+@media screen and (max-width: 768px) {
+  /* Override semua kemungkinan yang menyembunyikan navbar */
+  nav.navbar,
+  .navbar,
+  [class*="navbar"],
+  motion.nav.navbar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 99999 !important;
+    width: 100vw !important;
+    background: rgba(10, 10, 10, 0.98) !important;
+    min-height: 70px !important;
+    padding: 1rem 0 !important;
+    margin: 0 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+  
+  /* Pastikan nav-container dan logo terlihat */
+  .nav-container,
+  .navbar .nav-container {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 100000 !important;
+  }
+  
+  /* Pastikan mobile menu button terlihat */
+  .mobile-menu-btn,
+  .navbar .mobile-menu-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 100001 !important;
+  }
+  
+  /* Pastikan logo terlihat */
+  .logo,
+  .navbar .logo {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
