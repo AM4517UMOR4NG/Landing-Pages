@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { Github, Linkedin, Mail, Download, Code2, Sparkles, Rocket, Star, Zap, Terminal, Layers, Brain, Database, Cloud, Palette } from 'lucide-react'
+import { Github, Linkedin, Mail, Download, Code2, Sparkles, Rocket, Star, Zap, Terminal, Layers, Brain, Database, Cloud, Palette, Menu, X } from 'lucide-react'
 import './index.css'
 
 export default function App() {
@@ -11,6 +11,7 @@ export default function App() {
   const [typingText, setTypingText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const [isNavbarExpanded, setIsNavbarExpanded] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [crazyParticles, setCrazyParticles] = useState([])
   const [rootGlow, setRootGlow] = useState(0)
   const [stars, setStars] = useState([])
@@ -34,8 +35,13 @@ export default function App() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   useEffect(() => {
-    // Create particles
-    const newParticles = Array.from({ length: 50 }, (_, i) => ({
+    // Detect mobile device for performance optimization
+    const isMobile = window.innerWidth <= 768
+    const isLowEnd = navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 4
+    
+    // Create particles - reduced on mobile/low-end devices
+    const particleCount = isMobile || isLowEnd ? 20 : 50
+    const newParticles = Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -46,8 +52,9 @@ export default function App() {
     }))
     setParticles(newParticles)
 
-    // Create crazy particles for navbar expansion
-    const newCrazyParticles = Array.from({ length: 100 }, (_, i) => ({
+    // Create crazy particles for navbar expansion - reduced on mobile
+    const crazyParticleCount = isMobile || isLowEnd ? 30 : 100
+    const newCrazyParticles = Array.from({ length: crazyParticleCount }, (_, i) => ({
       id: `crazy-${i}`,
       x: Math.random() * window.innerWidth,
       y: Math.random() * 200,
@@ -61,8 +68,9 @@ export default function App() {
     }))
     setCrazyParticles(newCrazyParticles)
 
-    // Create space stars
-    const newStars = Array.from({ length: 200 }, (_, i) => ({
+    // Create space stars - reduced on mobile
+    const starCount = isMobile || isLowEnd ? 50 : 200
+    const newStars = Array.from({ length: starCount }, (_, i) => ({
       id: `star-${i}`,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -73,8 +81,9 @@ export default function App() {
     }))
     setStars(newStars)
 
-    // Create floating planets
-    const newPlanets = Array.from({ length: 5 }, (_, i) => ({
+    // Create floating planets - reduced on mobile
+    const planetCount = isMobile || isLowEnd ? 2 : 5
+    const newPlanets = Array.from({ length: planetCount }, (_, i) => ({
       id: `planet-${i}`,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -88,8 +97,9 @@ export default function App() {
     }))
     setPlanets(newPlanets)
 
-    // Create comets
-    const newComets = Array.from({ length: 3 }, (_, i) => ({
+    // Create comets - reduced on mobile
+    const cometCount = isMobile || isLowEnd ? 1 : 3
+    const newComets = Array.from({ length: cometCount }, (_, i) => ({
       id: `comet-${i}`,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -112,40 +122,55 @@ export default function App() {
       setScrollY(window.scrollY)
     }
 
-    // Animate particles
-    const animateParticles = () => {
-      setParticles(prev => prev.map(p => ({
-        ...p,
-        x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-        y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-      })))
-      
-      // Animate crazy particles
-      setCrazyParticles(prev => prev.map(p => ({
-        ...p,
-        x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-        y: (p.y + p.speedY) % (window.innerHeight + 200),
-        rotation: (p.rotation || 0) + p.rotationSpeed,
-      })))
+    // Animate particles with performance optimization
+    let animationFrameId
+    let lastTime = 0
+    let frameSkip = 0
+    const targetFPS = isMobile || isLowEnd ? 30 : 60
+    const frameInterval = 1000 / targetFPS
+    
+    const animateParticles = (currentTime) => {
+      if (currentTime - lastTime >= frameInterval) {
+        setParticles(prev => prev.map(p => ({
+          ...p,
+          x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+          y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+        })))
+        
+        // Animate crazy particles only when navbar is expanded
+        if (isNavbarExpanded) {
+          setCrazyParticles(prev => prev.map(p => ({
+            ...p,
+            x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+            y: (p.y + p.speedY) % (window.innerHeight + 200),
+            rotation: (p.rotation || 0) + p.rotationSpeed,
+          })))
+        }
 
-      // Animate planets
-      setPlanets(prev => prev.map(p => ({
-        ...p,
-        x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-        y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-        rotation: p.rotation + p.rotationSpeed,
-      })))
+        // Animate planets - slower on mobile (skip every other frame)
+        frameSkip++
+        if (!isMobile || frameSkip % 2 === 0) {
+          setPlanets(prev => prev.map(p => ({
+            ...p,
+            x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+            y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+            rotation: p.rotation + p.rotationSpeed,
+          })))
+        }
 
-      // Animate comets
-      setComets(prev => prev.map(p => ({
-        ...p,
-        x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-        y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-      })))
+        // Animate comets
+        setComets(prev => prev.map(p => ({
+          ...p,
+          x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+          y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+        })))
+        
+        lastTime = currentTime
+      }
       
-      requestAnimationFrame(animateParticles)
+      animationFrameId = requestAnimationFrame(animateParticles)
     }
-    animateParticles()
+    animationFrameId = requestAnimationFrame(animateParticles)
 
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('scroll', handleScroll)
@@ -153,6 +178,9 @@ export default function App() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('scroll', handleScroll)
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
     }
   }, [])
 
@@ -1143,7 +1171,25 @@ export default function App() {
               </motion.div>
             )}
           </motion.div>
-          <div className="nav-links">
+          
+          {/* Mobile Menu Button */}
+          <motion.button
+            className="mobile-menu-btn"
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsMobileMenuOpen(!isMobileMenuOpen)
+            }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="menu-icon" />
+            ) : (
+              <Menu className="menu-icon" />
+            )}
+          </motion.button>
+          
+          <div className={`nav-links ${isMobileMenuOpen ? 'nav-links-mobile-open' : ''}`}>
             {['Home', 'About', 'Skills', 'Projects', 'Contact'].map((item, i) => (
               <motion.a
                 key={item}
@@ -1151,6 +1197,7 @@ export default function App() {
                 onClick={(e) => {
                   e.stopPropagation()
                   setIsNavbarExpanded(false)
+                  setIsMobileMenuOpen(false)
                   
                   // Trigger cinematic light effect
                   triggerCinematicLightEffect(e, item.toLowerCase())

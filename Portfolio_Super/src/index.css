@@ -25,6 +25,32 @@ body {
   cursor: none;
 }
 
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.particle,
+.crazy-particle,
+.star,
+.planet,
+.comet {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .particle,
+  .crazy-particle,
+  .star,
+  .planet,
+  .comet {
+    will-change: auto;
+  }
+}
+
 .app {
   position: relative;
   min-height: 100vh;
@@ -2419,6 +2445,31 @@ body {
   }
 }
 
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 1001;
+  position: relative;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s;
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .hero-content {
     grid-template-columns: 1fr;
@@ -2429,8 +2480,55 @@ body {
     font-size: 2.5rem;
   }
   
+  .mobile-menu-btn {
+    display: block;
+  }
+  
   .nav-links {
-    display: none;
+    position: fixed;
+    top: 90px;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(30px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    gap: 0;
+    padding: 1rem 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+  }
+  
+  .nav-links-mobile-open {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    padding: 2rem 0;
+  }
+  
+  .nav-links-mobile-open .nav-link {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-container {
+    padding: 0 1.5rem;
+  }
+  
+  .navbar {
+    min-height: 70px;
+    padding: 1rem 0;
   }
   
   .floating-code {
@@ -2455,5 +2553,14 @@ body {
   
   .contact-wrapper {
     grid-template-columns: 1fr;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  .logo-icon {
+    width: 32px;
+    height: 32px;
   }
 }
