@@ -30,6 +30,7 @@ export default function App() {
   const [githubRepos, setGithubRepos] = useState([])
   const [glowingLink, setGlowingLink] = useState(null)
   const [loadingRepos, setLoadingRepos] = useState(true)
+  const [explosionParticles, setExplosionParticles] = useState([])
   
   const heroRef = useRef(null)
   const magneticBtnRef = useRef(null)
@@ -922,11 +923,36 @@ export default function App() {
                     setIsMobileMenuOpen(false)
                     setActiveSection(item.toLowerCase())
                     setGlowingLink(item.toLowerCase())
+                    
+                    // Create explosion particles
+                    const particles = []
+                    for (let i = 0; i < 6; i++) {
+                      particles.push({
+                        id: `${item.toLowerCase()}-${Date.now()}-${i}`,
+                        angle: (i * 60) * Math.PI / 180,
+                        velocity: 150 + Math.random() * 100
+                      })
+                    }
+                    setExplosionParticles(particles)
+                    
                     smoothScrollToSection(item.toLowerCase())
-                    setTimeout(() => setGlowingLink(null), 600)
+                    setTimeout(() => {
+                      setGlowingLink(null)
+                      setExplosionParticles([])
+                    }, 8000)
                   }}
                 >
                   {item}
+                  {glowingLink === item.toLowerCase() && explosionParticles.map((particle, index) => (
+                    <span
+                      key={particle.id}
+                      className="explosion-particle"
+                      style={{
+                        '--angle': particle.angle,
+                        '--velocity': particle.velocity
+                      }}
+                    />
+                  ))}
                 </a>
               ))}
             </nav>
@@ -956,11 +982,36 @@ export default function App() {
                 setIsMobileMenuOpen(false)
                 setActiveSection(item.toLowerCase())
                 setGlowingLink(item.toLowerCase())
+                
+                // Create explosion particles
+                const particles = []
+                for (let i = 0; i < 6; i++) {
+                  particles.push({
+                    id: `${item.toLowerCase()}-${Date.now()}-${i}`,
+                    angle: (i * 60) * Math.PI / 180,
+                    velocity: 150 + Math.random() * 100
+                  })
+                }
+                setExplosionParticles(particles)
+                
                 smoothScrollToSection(item.toLowerCase())
-                setTimeout(() => setGlowingLink(null), 600)
+                setTimeout(() => {
+                  setGlowingLink(null)
+                  setExplosionParticles([])
+                }, 8000)
               }}
             >
               {item}
+              {glowingLink === item.toLowerCase() && explosionParticles.map((particle, index) => (
+                <span
+                  key={particle.id}
+                  className="explosion-particle"
+                  style={{
+                    '--angle': particle.angle,
+                    '--velocity': particle.velocity
+                  }}
+                />
+              ))}
             </a>
           ))}
         </div>
