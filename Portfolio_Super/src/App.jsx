@@ -1936,7 +1936,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* Space Command Center Section */}
       <section id="contact" className="section">
         <div className="container">
           <motion.h2
@@ -1945,108 +1945,182 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Get In Touch
+            🚀 Space Command Center
           </motion.h2>
-          <div className="contact-wrapper">
+          <div className="command-center">
             <motion.div
-              className="contact-info"
+              className="command-panel"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ type: "spring" }}
             >
-              <motion.h3
-                animate={{ 
-                  scale: [1, 1.05, 1],
-                  opacity: [1, 0.8, 1]
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                I'm always excited to work on new projects!
-              </motion.h3>
-              <div className="contact-methods">
-                {[
-                  { icon: Mail, label: 'Email', value: 'aekmohop@gmail.com', href: 'mailto:aekmohop@gmail.com' },
-                  { icon: Github, label: 'GitHub', value: 'github.com/AM4517UMOR4NG', href: 'https://github.com/AM4517UMOR4NG' },
-                  { icon: Linkedin, label: 'LinkedIn', value: 'linkedin.com', href: 'https://linkedin.com' },
-                ].map((method, i) => {
-                  const Icon = method.icon
-                  return (
-                    <motion.a
-                      key={i}
-                      href={method.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="contact-method"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      whileHover={{ scale: 1.05, x: 10 }}
-                    >
-                      <Icon className="method-icon" />
-                      <div>
-                        <div className="method-label">{method.label}</div>
-                        <div className="method-value">{method.value}</div>
-                      </div>
-                    </motion.a>
-                  )
-                })}
+              <div className="panel-header">
+                <div className="panel-title">
+                  <Terminal className="panel-icon" />
+                  Mission Control
+                </div>
+                <div className="status-indicators">
+                  <div className="indicator active"></div>
+                  <div className="indicator active"></div>
+                  <div className="indicator"></div>
+                </div>
+              </div>
+              
+              <div className="stats-grid">
+                <motion.div 
+                  className="stat-card"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  animate={{ 
+                    boxShadow: ['0 0 20px rgba(168, 85, 247, 0.3)', '0 0 40px rgba(168, 85, 247, 0.6)', '0 0 20px rgba(168, 85, 247, 0.3)']
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <div className="stat-icon">
+                    <Github />
+                  </div>
+                  <div className="stat-info">
+                    <div className="stat-value">{githubRepos.length}</div>
+                    <div className="stat-label">Active Repos</div>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="stat-card"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  animate={{ 
+                    boxShadow: ['0 0 20px rgba(59, 130, 246, 0.3)', '0 0 40px rgba(59, 130, 246, 0.6)', '0 0 20px rgba(59, 130, 246, 0.3)']
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                >
+                  <div className="stat-icon">
+                    <Zap />
+                  </div>
+                  <div className="stat-info">
+                    <div className="stat-value">{githubRepos.reduce((acc, repo) => acc + (repo.stargazers_count || 0), 0)}</div>
+                    <div className="stat-label">Total Stars</div>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="stat-card"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  animate={{ 
+                    boxShadow: ['0 0 20px rgba(34, 197, 94, 0.3)', '0 0 40px rgba(34, 197, 94, 0.6)', '0 0 20px rgba(34, 197, 94, 0.3)']
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                >
+                  <div className="stat-icon">
+                    <Code2 />
+                  </div>
+                  <div className="stat-info">
+                    <div className="stat-value">{githubRepos.reduce((acc, repo) => acc + (repo.forks_count || 0), 0)}</div>
+                    <div className="stat-label">Code Forks</div>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="quick-actions">
+                <motion.a
+                  href="https://github.com/AM4517UMOR4NG"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="action-btn primary"
+                  whileHover={{ scale: 1.05, x: 10 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Github className="btn-icon" />
+                  View GitHub
+                </motion.a>
+                
+                <motion.a
+                  href="mailto:aekmohop@gmail.com"
+                  className="action-btn secondary"
+                  whileHover={{ scale: 1.05, x: 10 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Mail className="btn-icon" />
+                  Send Signal
+                </motion.a>
+                
+                <motion.a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="action-btn tertiary"
+                  whileHover={{ scale: 1.05, x: 10 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Linkedin className="btn-icon" />
+                  Connect
+                </motion.a>
               </div>
             </motion.div>
-            <motion.form
-              className="contact-form"
+
+            <motion.div
+              className="terminal-panel"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ type: "spring" }}
-              onSubmit={(e) => {
-                e.preventDefault()
-                alert('Message sent! (This is a demo)')
-              }}
+              transition={{ type: "spring", delay: 0.2 }}
             >
-              <motion.input
-                type="text"
-                placeholder="Your Name"
-                required
-                whileFocus={{ scale: 1.02, borderColor: 'var(--purple)' }}
-                transition={{ type: "spring" }}
-              />
-              <motion.input
-                type="email"
-                placeholder="Your Email"
-                required
-                whileFocus={{ scale: 1.02, borderColor: 'var(--purple)' }}
-                transition={{ type: "spring" }}
-              />
-              <motion.input
-                type="text"
-                placeholder="Subject"
-                required
-                whileFocus={{ scale: 1.02, borderColor: 'var(--purple)' }}
-                transition={{ type: "spring" }}
-              />
-              <motion.textarea
-                placeholder="Your Message"
-                rows="5"
-                required
-                whileFocus={{ scale: 1.02, borderColor: 'var(--purple)' }}
-                transition={{ type: "spring" }}
-              />
-              <motion.button
-                type="submit"
-                className="btn btn-primary"
-                whileHover={{ 
-                  scale: 1.05, 
-                  boxShadow: '0 10px 40px rgba(168, 85, 247, 0.4)',
-                  rotate: 2
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Mail className="btn-icon" />
-                Send Message
-              </motion.button>
-            </motion.form>
+              <div className="terminal-header">
+                <div className="terminal-buttons">
+                  <div className="terminal-btn close"></div>
+                  <div className="terminal-btn minimize"></div>
+                  <div className="terminal-btn maximize"></div>
+                </div>
+                <div className="terminal-title">Space Terminal v2.0</div>
+              </div>
+              
+              <div className="terminal-content">
+                <div className="terminal-line">
+                  <span className="prompt">$</span>
+                  <span className="command">Initializing quantum connection...</span>
+                </div>
+                <div className="terminal-line success">
+                  <span className="prompt">$</span>
+                  <span className="command">✓ Link established with Earth station</span>
+                </div>
+                <div className="terminal-line">
+                  <span className="prompt">$</span>
+                  <span className="command">Scanning for available projects...</span>
+                </div>
+                <div className="terminal-line success">
+                  <span className="prompt">$</span>
+                  <span className="command">✓ Found {githubRepos.length} active repositories</span>
+                </div>
+                <div className="terminal-line">
+                  <span className="prompt">$</span>
+                  <span className="command">Calculating trajectory to next project...</span>
+                </div>
+                <div className="terminal-line">
+                  <span className="prompt">$</span>
+                  <span className="cursor">_</span>
+                </div>
+              </div>
+              
+              <div className="terminal-input">
+                <input 
+                  type="text" 
+                  placeholder="Enter command..."
+                  className="terminal-field"
+                  onFocus={(e) => {
+                    e.target.placeholder = "Try: 'launch', 'scan', 'connect'..."
+                  }}
+                  onBlur={(e) => {
+                    e.target.placeholder = "Enter command..."
+                  }}
+                />
+                <motion.button 
+                  className="terminal-send"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Rocket />
+                </motion.button>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
