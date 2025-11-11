@@ -27,6 +27,8 @@ export default function App() {
   const [lightTrails, setLightTrails] = useState([])
   const [clickExplosion, setClickExplosion] = useState(null)
   const [activeSection, setActiveSection] = useState('home')
+  const [githubRepos, setGithubRepos] = useState([])
+  const [loadingRepos, setLoadingRepos] = useState(true)
   
   const heroRef = useRef(null)
   const magneticBtnRef = useRef(null)
@@ -214,8 +216,16 @@ export default function App() {
     const clickX = e.clientX
     const clickY = e.clientY
     
-    // Only create minimal light effect
-    setLightBeam({ x: clickX, y: clickY, section: sectionName })
+    // Only create minimal light effect with required fields
+    const beam = {
+      startX: clickX,
+      startY: clickY,
+      endX: window.innerWidth / 2,
+      endY: 80,
+      color: '#a855f7',
+      duration: 800,
+    }
+    setLightBeam(beam)
     
     // Simple click explosion effect (reduced)
     const explosion = {
@@ -388,6 +398,43 @@ export default function App() {
     }, 30)
 
     return () => clearInterval(typeInterval)
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const fetchRepos = async () => {
+      try {
+        const res = await fetch('https://api.github.com/users/AM4517UMOR4NG/repos?per_page=100&sort=updated', {
+          headers: { 'Accept': 'application/vnd.github+json, application/vnd.github.mercy-preview+json' },
+          signal: controller.signal
+        })
+        if (!res.ok) throw new Error('Failed to fetch')
+        const data = await res.json()
+        const mapped = data
+          .filter(r => !r.private && !r.fork && !r.archived)
+          .map(r => ({
+            id: r.id,
+            name: r.name,
+            full_name: r.full_name,
+            description: r.description || 'No description provided',
+            html_url: r.html_url,
+            homepage: r.homepage,
+            topics: r.topics || [],
+            language: r.language,
+            stargazers_count: r.stargazers_count,
+            forks_count: r.forks_count,
+            updated_at: r.updated_at,
+            image: `https://opengraph.githubassets.com/1/${r.full_name}`
+          }))
+        setGithubRepos(mapped)
+      } catch (e) {
+        setGithubRepos([])
+      } finally {
+        setLoadingRepos(false)
+      }
+    }
+    fetchRepos()
+    return () => controller.abort()
   }, [])
 
   return (
@@ -2194,90 +2241,86 @@ export default function App() {
             All Projects
           </motion.h2>
           <div className="projects-grid">
-            {[
-              { 
-                title: 'Football Ticket System', 
-                desc: 'Interactive football ticketing website with Spring Boot', 
-                tech: ['Spring Boot', 'JavaScript', 'MySQL'], 
-                github: 'https://github.com/AM4517UMOR4NG/Football-Ticket',
-                image: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800&h=600&fit=crop'
-              },
-              { 
-                title: 'Government Report System', 
-                desc: 'Laravel-based public reports and complaints system', 
-                tech: ['Laravel', 'PHP', 'Blade'], 
-                github: 'https://github.com/AM4517UMOR4NG/Government-General-Report-and-Complain-System',
-                image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop'
-              },
-              { 
-                title: 'HOLY BIBLE Web App', 
-                desc: 'Web application for online HOLY BIBLE reading', 
-                tech: ['TypeScript', 'React'], 
-                github: 'https://github.com/AM4517UMOR4NG/HOLY-BIBLE',
-                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR38hppIONsI2GYUluv2xhkVV8eiWu68NxY0Q&s'
-              },
-              { 
-                title: 'Plagiarism Checker', 
-                desc: 'Web application for checking plagiarism', 
-                tech: ['Python', 'Flask'], 
-                github: 'https://github.com/AM4517UMOR4NG/Plagiarism-Checker',
-                image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop'
-              },
-            ].map((project, i) => (
-              <motion.div
-                key={i}
-                className="project-card"
-                initial={{ opacity: 0, y: 50, rotateX: -20 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2, type: "spring" }}
-                whileHover={{ 
-                  y: -30,
-                  rotateY: 10,
-                  rotateX: -10,
-                  scale: 1.05,
-                  boxShadow: '0 30px 60px rgba(168, 85, 247, 0.4)',
-                  zIndex: 10
-                }}
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <motion.div 
-                  className="project-image"
-                  whileHover={{ scale: 1.2 }}
-                  transition={{ duration: 0.3 }}
-                  style={{
-                    backgroundImage: `url(${project.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                  }}
-                >
-                  <div className="project-image-overlay"></div>
-                </motion.div>
+            {loadingRepos ? (
+              <div className="project-card">
                 <div className="project-content">
-                  <h3>{project.title}</h3>
-                  <p>{project.desc}</p>
-                  <div className="project-tech">
-                    {project.tech.map((tech, j) => (
-                      <span key={j} className="tech-tag">{tech}</span>
-                    ))}
-                  </div>
-                  {project.github && (
-                    <motion.a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="project-github-link"
-                      whileHover={{ scale: 1.05, x: 5 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Github className="github-link-icon" />
-                      View on GitHub
-                    </motion.a>
-                  )}
+                  <h3>Loading...</h3>
+                  <p>Fetching repositories from GitHub</p>
                 </div>
-              </motion.div>
-            ))}
+              </div>
+            ) : (
+              githubRepos.map((repo, i) => (
+                <motion.div
+                  key={repo.id}
+                  className="project-card"
+                  initial={{ opacity: 0, y: 50, rotateX: -20 }}
+                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06, type: "spring" }}
+                  whileHover={{ 
+                    y: -30,
+                    rotateY: 10,
+                    rotateX: -10,
+                    scale: 1.05,
+                    boxShadow: '0 30px 60px rgba(168, 85, 247, 0.4)',
+                    zIndex: 10
+                  }}
+                  style={{ transformStyle: 'preserve-3d' }}
+                >
+                  <motion.div 
+                    className="project-image"
+                    whileHover={{ scale: 1.2 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      backgroundImage: `url(${repo.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat'
+                    }}
+                  >
+                    <div className="project-image-overlay"></div>
+                  </motion.div>
+                  <div className="project-content">
+                    <h3>{repo.name}</h3>
+                    <p>{repo.description}</p>
+                    <div className="project-tech">
+                      {((repo.topics && repo.topics.length ? repo.topics.slice(0, 5) : []).concat(repo.language ? [repo.language] : [])).map((tag, j) => (
+                        <span key={`${repo.id}-tag-${j}`} className="tech-tag">{tag}</span>
+                      ))}
+                      <span className="tech-tag">⭐ {repo.stargazers_count}</span>
+                      <span className="tech-tag">Forks {repo.forks_count}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      {repo.html_url && (
+                        <motion.a
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-github-link"
+                          whileHover={{ scale: 1.05, x: 5 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Github className="github-link-icon" />
+                          View on GitHub
+                        </motion.a>
+                      )}
+                      {repo.homepage && (
+                        <motion.a
+                          href={repo.homepage.startsWith('http') ? repo.homepage : `https://${repo.homepage}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-github-link"
+                          whileHover={{ scale: 1.05, x: 5 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Live Demo
+                        </motion.a>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </section>
