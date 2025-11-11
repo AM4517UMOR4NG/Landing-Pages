@@ -30,7 +30,6 @@ export default function App() {
   const [githubRepos, setGithubRepos] = useState([])
   const [glowingLink, setGlowingLink] = useState(null)
   const [loadingRepos, setLoadingRepos] = useState(true)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const heroRef = useRef(null)
   const magneticBtnRef = useRef(null)
