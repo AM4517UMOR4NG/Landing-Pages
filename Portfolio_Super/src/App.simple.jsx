@@ -10,8 +10,8 @@ export default function App() {
       minHeight: '100vh',
       fontSize: '24px'
     }}>
-      <h1 style={{ color: '#A855F7' }}>Portfolio Super</h1>
-      <p>If you see this, React is working!</p>
+      <h1 style={{ color: '#A855F7' }}>Test</h1>
+      <p>Test</p>
       <p style={{ color: '#EC4899' }}>Testing basic rendering...</p>
     </div>
   )
