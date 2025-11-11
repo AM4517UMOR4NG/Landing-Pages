@@ -968,6 +968,13 @@ export default function App() {
               >
                 {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
+              <img
+                className="new-avatar"
+                src="https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg?semt=ais_hybrid&w=740&q=80"
+                alt="Profile"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </div>
         </div>
@@ -1257,13 +1264,13 @@ export default function App() {
                     { 
                       title: 'Software Engineer', 
                       description: 'Building Amazing Solutions',
-                      icon: '12',
+                      icon: '07',
                       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
                     },
                     { 
                       title: 'Full Stack Developer', 
                       description: 'End-to-End Development',
-                      icon: '🚀',
+                      icon: '12',
                       gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
                     },
                   ].map((role, i) => (
