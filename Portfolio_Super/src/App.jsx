@@ -19,7 +19,7 @@ export default function App() {
   const [rocketLaunched, setRocketLaunched] = useState(false)
   const [comets, setComets] = useState([])
   
-  // Cinematic light effects state
+  // Cinematic light effects state - simplified for performance
   const [lightBeam, setLightBeam] = useState(null)
   const [screenFlash, setScreenFlash] = useState(false)
   const [energyPulse, setEnergyPulse] = useState(false)
@@ -39,81 +39,102 @@ export default function App() {
     const isMobile = window.innerWidth <= 768
     const isLowEnd = navigator.hardwareConcurrency <= 4 || (navigator.deviceMemory && navigator.deviceMemory <= 4)
     
-    // Create particles - drastically reduced on mobile/low-end devices
-    const particleCount = isMobile || isLowEnd ? 10 : 50
+    // Skip all animations on mobile for maximum performance
+    if (isMobile) {
+      // No particles on mobile
+      setParticles([])
+      setCrazyParticles([])
+      setStars([])
+      setPlanets([])
+      setComets([])
+      
+      // Simple handlers without animations
+      const handleMouseMove = () => {} // Disabled on mobile
+      const handleScroll = () => {
+        setScrollY(window.scrollY)
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+      }
+    }
+    
+    // Desktop animations (highly reduced for performance)
+    const particleCount = isLowEnd ? 5 : 10 // Reduced from 10-15 to 5-10
     const newParticles = Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 3 + 1,
-      speedX: (Math.random() - 0.5) * 2,
-      speedY: (Math.random() - 0.5) * 2,
+      size: Math.random() * 2 + 1,
+      speedX: (Math.random() - 0.5) * 0.5, // Reduced speed
+      speedY: (Math.random() - 0.5) * 0.5, // Reduced speed
       color: `hsl(${Math.random() * 60 + 280}, 100%, 50%)`,
     }))
     setParticles(newParticles)
 
-    // Create crazy particles for navbar expansion - drastically reduced on mobile
-    const crazyParticleCount = isMobile || isLowEnd ? 10 : 100
-    const newCrazyParticles = Array.from({ length: crazyParticleCount }, (_, i) => ({
-      id: `crazy-${i}`,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * 200,
-      size: Math.random() * 5 + 2,
-      speedX: (Math.random() - 0.5) * 4,
-      speedY: Math.random() * 2 + 1,
-      color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-      opacity: Math.random() * 0.8 + 0.2,
-      rotationSpeed: (Math.random() - 0.5) * 10,
-      scale: Math.random() * 2 + 0.5,
-    }))
-    setCrazyParticles(newCrazyParticles)
+    // Minimal crazy particles - Only when navbar is expanded
+    if (!isLowEnd && !isMobile) {
+      const crazyParticleCount = 5 // Reduced from 10-20 to 5
+      const newCrazyParticles = Array.from({ length: crazyParticleCount }, (_, i) => ({
+        id: `crazy-${i}`,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * 200,
+        size: Math.random() * 3 + 1, // Smaller size
+        speedX: (Math.random() - 0.5) * 1.5, // Reduced speed
+        speedY: Math.random() * 1 + 0.5, // Reduced speed
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        opacity: Math.random() * 0.5 + 0.2,
+        rotationSpeed: (Math.random() - 0.5) * 4, // Reduced rotation
+        scale: Math.random() * 1 + 0.5,
+      }))
+      setCrazyParticles(newCrazyParticles)
+    } else {
+      setCrazyParticles([])
+    }
 
-    // Create space stars - drastically reduced on mobile
-    const starCount = isMobile || isLowEnd ? 20 : 200
+    // Minimal stars
+    const starCount = isLowEnd ? 15 : 25 // Reduced from 30-50 to 15-25
     const newStars = Array.from({ length: starCount }, (_, i) => ({
       id: `star-${i}`,
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 3 + 1,
-      twinkleSpeed: Math.random() * 3 + 1,
-      brightness: Math.random() * 0.8 + 0.2,
+      size: Math.random() * 1.5 + 0.5, // Smaller size
+      twinkleSpeed: Math.random() * 2 + 1,
+      brightness: Math.random() * 0.6 + 0.2,
       color: Math.random() > 0.5 ? '#ffffff' : '#ffffcc',
     }))
     setStars(newStars)
 
-    // Create floating planets - disabled on mobile for performance
-    const planetCount = isMobile || isLowEnd ? 0 : 5
-    const newPlanets = Array.from({ length: planetCount }, (_, i) => ({
-      id: `planet-${i}`,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 30 + 20,
-      speedX: (Math.random() - 0.5) * 0.5,
-      speedY: (Math.random() - 0.5) * 0.3,
-      rotation: Math.random() * 360,
-      rotationSpeed: (Math.random() - 0.5) * 2,
-      color: `hsl(${Math.random() * 360}, 50%, 40%)`,
-      hasRings: Math.random() > 0.7,
-    }))
-    setPlanets(newPlanets)
+    // Minimal planets - Only on desktop
+    if (!isMobile && !isLowEnd) {
+      const planetCount = 1 // Only 1 planet max
+      const newPlanets = Array.from({ length: planetCount }, (_, i) => ({
+        id: `planet-${i}`,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 20 + 10, // Smaller size
+        speedX: (Math.random() - 0.5) * 0.15, // Slower speed
+        speedY: (Math.random() - 0.5) * 0.1, // Slower speed
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 0.5, // Slower rotation
+        color: `hsl(${Math.random() * 360}, 50%, 40%)`,
+        hasRings: false,
+      }))
+      setPlanets(newPlanets)
+    } else {
+      setPlanets([])
+    }
 
-    // Create comets - disabled on mobile for performance
-    const cometCount = isMobile || isLowEnd ? 0 : 3
-    const newComets = Array.from({ length: cometCount }, (_, i) => ({
-      id: `comet-${i}`,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      speedX: Math.random() * 3 + 2,
-      speedY: Math.random() * 2 + 1,
-      size: Math.random() * 4 + 2,
-      tailLength: Math.random() * 100 + 50,
-      color: `hsl(${200 + Math.random() * 60}, 100%, 70%)`,
-    }))
-    setComets(newComets)
+    // No comets for better performance
+    setComets([]) // Completely disabled comets
 
     const handleMouseMove = (e) => {
-      // Throttle mouse move for performance
-      if (isMobile) return
+      // Throttle mouse position updates more aggressively
+      if (Date.now() - (window.lastMouseUpdate || 0) < 100) return // Increased from 50ms to 100ms
+      window.lastMouseUpdate = Date.now()
+      
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
@@ -124,75 +145,54 @@ export default function App() {
       setScrollY(window.scrollY)
     }
 
-    // Animate particles with performance optimization
+    // Optimize animation loop with lower FPS
     let animationFrameId
     let lastTime = 0
-    let frameSkip = 0
-    const targetFPS = isMobile || isLowEnd ? 20 : 60  // Even lower FPS on mobile
+    const targetFPS = isLowEnd ? 15 : 24 // Much lower FPS for better performance
     const frameInterval = 1000 / targetFPS
     
-    // Skip animation entirely on very low-end devices
-    if (!isMobile && !isLowEnd) {
-      const animateParticles = (currentTime) => {
-        if (currentTime - lastTime >= frameInterval) {
+    const animateParticles = (currentTime) => {
+      if (currentTime - lastTime >= frameInterval) {
+        // Only animate if navbar is not expanded to save resources
+        if (!isNavbarExpanded) {
           setParticles(prev => prev.map(p => ({
             ...p,
             x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
             y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
           })))
-          
-          // Animate crazy particles only when navbar is expanded
-          if (isNavbarExpanded) {
-            setCrazyParticles(prev => prev.map(p => ({
-              ...p,
-              x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-              y: (p.y + p.speedY) % (window.innerHeight + 200),
-              rotation: (p.rotation || 0) + p.rotationSpeed,
-            })))
-          }
-
-          // Animate planets - skip every other frame
-          frameSkip++
-          if (frameSkip % 2 === 0) {
-            setPlanets(prev => prev.map(p => ({
-              ...p,
-              x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-              y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-              rotation: p.rotation + p.rotationSpeed,
-            })))
-          }
-
-          // Animate comets
-          setComets(prev => prev.map(p => ({
-            ...p,
-            x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
-            y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
-          })))
-          
-          lastTime = currentTime
         }
         
-        animationFrameId = requestAnimationFrame(animateParticles)
-      }
-      animationFrameId = requestAnimationFrame(animateParticles)
-    } else {
-      // On mobile/low-end: only animate particles occasionally
-      const animateParticles = (currentTime) => {
-        if (currentTime - lastTime >= frameInterval * 3) {  // Update 3x slower
-          setParticles(prev => prev.map(p => ({
+        // Animate crazy particles only when navbar is expanded
+        if (isNavbarExpanded) {
+          setCrazyParticles(prev => prev.map(p => ({
+            ...p,
+            x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
+            y: (p.y + p.speedY) % (window.innerHeight + 200),
+            rotation: (p.rotation || 0) + p.rotationSpeed,
+          })))
+        }
+
+        // Animate planets less frequently
+        if (currentTime % 2 === 0) {
+          setPlanets(prev => prev.map(p => ({
             ...p,
             x: (p.x + p.speedX + window.innerWidth) % window.innerWidth,
             y: (p.y + p.speedY + window.innerHeight) % window.innerHeight,
+            rotation: p.rotation + p.rotationSpeed,
           })))
-          lastTime = currentTime
         }
-        animationFrameId = requestAnimationFrame(animateParticles)
+
+        // Comets disabled for performance
+        
+        lastTime = currentTime
       }
+      
       animationFrameId = requestAnimationFrame(animateParticles)
     }
+    animationFrameId = requestAnimationFrame(animateParticles)
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
+    window.addEventListener('scroll', handleScroll, { passive: true })
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
@@ -201,171 +201,128 @@ export default function App() {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [])
+  }, [isNavbarExpanded])
 
-  // Cinematic light beam effect on navbar click
+  // Cinematic light beam effect on navbar click (simplified for performance)
   const triggerCinematicLightEffect = (e, sectionName) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const clickX = rect.left + rect.width / 2
-    const clickY = rect.top + rect.height / 2
-    
-    // Create light beam from click position
-    const beam = {
-      id: Date.now(),
-      startX: clickX,
-      startY: clickY,
-      endX: window.innerWidth / 2,
-      endY: window.innerHeight / 2,
-      color: `hsl(${Math.random() * 60 + 200}, 100%, 70%)`,
-      duration: 1500,
+    // Skip cinematic effects on mobile for performance
+    if (window.innerWidth <= 768) {
+      setActiveSection(sectionName)
+      return
     }
-    setLightBeam(beam)
     
-    // Create screen flash
-    setScreenFlash(true)
-    setTimeout(() => setScreenFlash(false), 300)
+    const clickX = e.clientX
+    const clickY = e.clientY
     
-    // Create energy pulse
-    setEnergyPulse(true)
-    setTimeout(() => setEnergyPulse(false), 800)
+    // Only create minimal light effect
+    setLightBeam({ x: clickX, y: clickY, section: sectionName })
     
-    // Create click explosion
+    // Simple click explosion effect (reduced)
     const explosion = {
-      id: Date.now(),
       x: clickX,
       y: clickY,
-      particles: Array.from({ length: 50 }, (_, i) => ({
+      particles: Array.from({ length: 10 }, (_, i) => ({ // Greatly reduced from 20-50
         id: i,
-        angle: (Math.PI * 2 * i) / 50,
-        speed: Math.random() * 15 + 10,
-        size: Math.random() * 6 + 2,
+        angle: (Math.PI * 2 * i) / 10,
+        speed: Math.random() * 5 + 3, // Reduced speed
+        size: Math.random() * 3 + 1, // Smaller particles
         color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-        lifetime: 2000,
+        lifetime: 1000, // Shorter lifetime
       })),
     }
     setClickExplosion(explosion)
     
-    // Create portal effect at target section
-    setTimeout(() => {
-      const portal = {
-        id: Date.now(),
-        section: sectionName,
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-        scale: 0,
-        opacity: 0,
-      }
-      setPortalEffect(portal)
-      
-      // Animate portal
-      setTimeout(() => {
-        setPortalEffect(prev => prev ? { ...prev, scale: 2, opacity: 1 } : null)
-      }, 100)
-      
-      setTimeout(() => {
-        setPortalEffect(prev => prev ? { ...prev, scale: 0, opacity: 0 } : null)
-      }, 1500)
-    }, 500)
+    // Skip most cinematic effects for performance
     
-    // Create light trails
-    const trails = Array.from({ length: 20 }, (_, i) => ({
-      id: `trail-${Date.now()}-${i}`,
-      x: clickX,
-      y: clickY,
-      targetX: window.innerWidth / 2 + (Math.random() - 0.5) * 400,
-      targetY: window.innerHeight / 2 + (Math.random() - 0.5) * 400,
-      speed: Math.random() * 8 + 4,
-      size: Math.random() * 4 + 1,
-      color: `hsl(${Math.random() * 60 + 200}, 100%, 70%)`,
-      delay: i * 50,
-    }))
-    setLightTrails(prev => [...prev, ...trails])
-    
-    // Clean up effects
+    // Clean up effects quickly
     setTimeout(() => {
       setLightBeam(null)
       setClickExplosion(null)
-      setPortalEffect(null)
-      setLightTrails(prev => prev.filter(t => !t.id.startsWith(`trail-${Date.now()}`)))
-    }, 3000)
+    }, 800) // Much shorter duration
     
     // Update active section
     setActiveSection(sectionName)
   }
 
-  // Smooth scroll with light effect
+  // Smooth scroll with light effect (simplified on mobile)
   const smoothScrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId)
     if (section) {
       const rect = section.getBoundingClientRect()
       const targetY = rect.top + window.scrollY
       
-      // Create additional light trails during scroll
-      const scrollTrails = Array.from({ length: 30 }, (_, i) => ({
-        id: `scroll-${Date.now()}-${i}`,
-        x: Math.random() * window.innerWidth,
-        y: window.innerHeight / 2,
-        targetY: targetY,
-        speed: Math.random() * 12 + 6,
-        size: Math.random() * 3 + 1,
-        color: `hsl(${Math.random() * 60 + 180}, 100%, 60%)`,
-      }))
-      setLightTrails(prev => [...prev, ...scrollTrails])
+      // Skip light trails on mobile for performance
+      if (window.innerWidth > 768) {
+        // Reduced light trails during scroll
+        const scrollTrails = Array.from({ length: 10 }, (_, i) => ({ // Reduced from 30
+          id: `scroll-${Date.now()}-${i}`,
+          x: Math.random() * window.innerWidth,
+          y: window.innerHeight / 2,
+          targetY: targetY,
+          speed: Math.random() * 8 + 4, // Reduced from 12+6
+          size: Math.random() * 2 + 1, // Reduced from 3+1
+          color: `hsl(${Math.random() * 60 + 180}, 100%, 60%)`,
+        }))
+        setLightTrails(prev => [...prev, ...scrollTrails])
+        
+        // Clean up scroll trails faster
+        setTimeout(() => {
+          setLightTrails(prev => prev.filter(t => !t.id.startsWith(`scroll-${Date.now()}`)))
+        }, 1500) // Reduced from 2000
+      }
       
       // Smooth scroll
       window.scrollTo({
         top: targetY,
         behavior: 'smooth'
       })
-      
-      // Clean up scroll trails
-      setTimeout(() => {
-        setLightTrails(prev => prev.filter(t => !t.id.startsWith(`scroll-${Date.now()}`)))
-      }, 2000)
     }
   }
   const toggleNavbarExpansion = () => {
     setIsNavbarExpanded(!isNavbarExpanded)
     if (!isNavbarExpanded) {
+      // Skip effects on mobile
+      if (window.innerWidth <= 768) return
+      
       // Trigger root glow effect
       setRootGlow(1)
-      setTimeout(() => setRootGlow(0), 1000)
+      setTimeout(() => setRootGlow(0), 800) // Reduced from 1000
       
-      // Launch rocket!
+      // Launch rocket - optional
       setRocketLaunched(true)
-      setTimeout(() => setRocketLaunched(false), 3000)
+      setTimeout(() => setRocketLaunched(false), 2000) // Reduced from 3000
       
-      // Add explosion of crazy particles
-      const explosionParticles = Array.from({ length: 50 }, (_, i) => ({
+      // Reduced explosion particles
+      const explosionParticles = Array.from({ length: 20 }, (_, i) => ({ // Reduced from 50
         id: `explosion-${Date.now()}-${i}`,
-        x: 600 + (Math.random() - 0.5) * 200,
-        y: 100 + Math.random() * 100,
-        size: Math.random() * 8 + 4,
-        speedX: (Math.random() - 0.5) * 10,
-        speedY: Math.random() * -5 - 2,
+        x: 600 + (Math.random() - 0.5) * 150, // Reduced range
+        y: 100 + Math.random() * 80,
+        size: Math.random() * 6 + 3, // Reduced from 8+4
+        speedX: (Math.random() - 0.5) * 6, // Reduced from 10
+        speedY: Math.random() * -4 - 1, // Reduced from -5-2
         color: `hsl(${Math.random() * 360}, 100%, 50%)`,
         opacity: 1,
-        lifetime: 2000,
+        lifetime: 1500, // Reduced from 2000
       }))
       
       setCrazyParticles(prev => [...prev, ...explosionParticles])
       
-      // Add meteor shower
-      const meteors = Array.from({ length: 20 }, (_, i) => ({
+      // Reduced meteor shower
+      const meteors = Array.from({ length: 8 }, (_, i) => ({ // Reduced from 20
         id: `meteor-${Date.now()}-${i}`,
         x: Math.random() * window.innerWidth,
         y: -50,
-        size: Math.random() * 6 + 2,
-        speedX: (Math.random() - 0.5) * 5,
-        speedY: Math.random() * 10 + 5,
+        size: Math.random() * 4 + 2, // Reduced from 6+2
+        speedX: (Math.random() - 0.5) * 3, // Reduced from 5
+        speedY: Math.random() * 8 + 4, // Reduced from 10+5
         color: `hsl(${30 + Math.random() * 30}, 100%, 60%)`,
-        tailLength: Math.random() * 80 + 40,
+        tailLength: Math.random() * 50 + 30, // Reduced from 80+40
         opacity: 1,
       }))
       
       setComets(prev => [...prev, ...meteors])
       
-      // Remove explosion particles after lifetime
+      // Remove explosion particles faster
       setTimeout(() => {
         setCrazyParticles(prev => 
           prev.filter(p => !p.id.startsWith('explosion-'))
@@ -373,7 +330,7 @@ export default function App() {
         setComets(prev => 
           prev.filter(p => !p.id.startsWith('meteor-'))
         )
-      }, 3000)
+      }, 2000) // Reduced from 3000
     }
   }
 
@@ -1715,53 +1672,70 @@ export default function App() {
                     </motion.div>
                   </div>
                 </motion.div>
-                <div className="stats">
+                {/* Professional Role Banners */}
+                <div className="role-banners">
                   {[
-                    { number: '50+', label: 'Projects', icon: Rocket },
-                    { number: '30+', label: 'Clients', icon: Star },
-                    { number: '15+', label: 'Awards', icon: Zap },
-                  ].map((stat, i) => {
-                    const Icon = stat.icon
-                    return (
-                      <motion.div
-                        key={i}
-                        className="stat-item"
-                        initial={{ opacity: 0, scale: 0, rotate: -180 }}
-                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                        transition={{ delay: 1 + i * 0.2, type: "spring" }}
-                        whileHover={{ scale: 1.15, y: -10, rotate: 5 }}
+                    { 
+                      title: 'Student', 
+                      description: 'Always Learning & Growing',
+                      icon: '24',
+                      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    },
+                    { 
+                      title: 'Software Engineer', 
+                      description: 'Building Amazing Solutions',
+                      icon: '12',
+                      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                    },
+                    { 
+                      title: 'Full Stack Developer', 
+                      description: 'End-to-End Development',
+                      icon: '🚀',
+                      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                    },
+                  ].map((role, i) => (
+                    <motion.div
+                      key={i}
+                      className="role-banner"
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1 + i * 0.15, type: "spring", stiffness: 100 }}
+                      whileHover={{ scale: 1.05, y: -8 }}
+                      style={{ background: role.gradient }}
+                    >
+                      <motion.div 
+                        className="role-icon"
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                          scale: [1, 1.1, 1]
+                        }}
+                        transition={{ 
+                          duration: 3, 
+                          repeat: Infinity, 
+                          delay: i * 0.5 
+                        }}
                       >
-                        <motion.div
-                          className="stat-icon"
-                          animate={{ 
-                            scale: [1, 1.2, 1],
-                            rotate: [0, 10, 0]
-                          }}
-                          transition={{ 
-                            duration: 2, 
-                            repeat: Infinity, 
-                            delay: i * 0.3 
-                          }}
-                        >
-                          <Icon />
-                        </motion.div>
-                        <motion.div
-                          className="stat-number"
-                          animate={{
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: i * 0.2
-                          }}
-                        >
-                          {stat.number}
-                        </motion.div>
-                        <div className="stat-label">{stat.label}</div>
+                        {role.icon}
                       </motion.div>
-                    )
-                  })}
+                      <div className="role-content">
+                        <h3 className="role-title">{role.title}</h3>
+                        <p className="role-description">{role.description}</p>
+                      </div>
+                      <motion.div 
+                        className="role-shine"
+                        animate={{
+                          x: [-100, 400],
+                          opacity: [0, 1, 0]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          delay: i * 0.8,
+                          repeatDelay: 2
+                        }}
+                      />
+                    </motion.div>
+                  ))}
                 </div>
                 <div className="tech-stack">
                   {['Spring Boot', 'Laravel', 'TypeScript', 'Python'].map((tech, i) => (
