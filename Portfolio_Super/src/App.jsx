@@ -28,7 +28,9 @@ export default function App() {
   const [clickExplosion, setClickExplosion] = useState(null)
   const [activeSection, setActiveSection] = useState('home')
   const [githubRepos, setGithubRepos] = useState([])
+  const [glowingLink, setGlowingLink] = useState(null)
   const [loadingRepos, setLoadingRepos] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   const heroRef = useRef(null)
   const magneticBtnRef = useRef(null)
@@ -905,39 +907,43 @@ export default function App() {
       {/* New Lightweight Navbar */}
       <header className="new-navbar" role="banner">
         <div className="new-nav-inner">
-          <a href="#home" className="new-brand" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="new-brand-logo">AM</span>
-            <span className="new-brand-text">Portfolio</span>
-          </a>
-          <nav className="new-links" aria-label="Primary">
-            {['Home','About','Skills','Projects','Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className={`new-link ${activeSection === item.toLowerCase() ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsMobileMenuOpen(false)
-                  setActiveSection(item.toLowerCase())
-                  smoothScrollToSection(item.toLowerCase())
-                }}
-              >
-                {item}
-              </a>
-            ))}
-          </nav>
-          <div className="new-actions">
-            <a className="new-gh" href="https://github.com/AM4517UMOR4NG" target="_blank" rel="noreferrer">
-              <Github size={20} />
+          <div className="new-nav-content">
+            <a href="#home" className="new-brand" onClick={() => setIsMobileMenuOpen(false)}>
+              <span className="new-brand-logo">AM</span>
+              <span className="new-brand-text">Portfolio</span>
             </a>
-            <button
-              className="new-mobile-btn"
-              aria-label="Toggle mobile menu"
-              aria-expanded={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            <nav className="new-links" aria-label="Primary">
+              {['Home','About','Skills','Projects','Contact'].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className={`new-link ${activeSection === item.toLowerCase() ? 'active' : ''} ${glowingLink === item.toLowerCase() ? 'rocket-glow' : ''}`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsMobileMenuOpen(false)
+                    setActiveSection(item.toLowerCase())
+                    setGlowingLink(item.toLowerCase())
+                    smoothScrollToSection(item.toLowerCase())
+                    setTimeout(() => setGlowingLink(null), 600)
+                  }}
+                >
+                  {item}
+                </a>
+              ))}
+            </nav>
+            <div className="new-actions">
+              <a className="new-gh" href="https://github.com/AM4517UMOR4NG" target="_blank" rel="noreferrer">
+                <Github size={20} />
+              </a>
+              <button
+                className="new-mobile-btn"
+                aria-label="Toggle mobile menu"
+                aria-expanded={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
         <div className={`new-mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
@@ -945,12 +951,14 @@ export default function App() {
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
-              className="new-mobile-link"
+              className={`new-mobile-link ${glowingLink === item.toLowerCase() ? 'rocket-glow' : ''}`}
               onClick={(e) => {
                 e.preventDefault()
                 setIsMobileMenuOpen(false)
                 setActiveSection(item.toLowerCase())
+                setGlowingLink(item.toLowerCase())
                 smoothScrollToSection(item.toLowerCase())
+                setTimeout(() => setGlowingLink(null), 600)
               }}
             >
               {item}

@@ -2720,11 +2720,19 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   height: 64px;
-  padding: 0 1rem;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.new-nav-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  width: 100%;
+  max-width: 1000px;
 }
 
 .new-brand {
@@ -2761,16 +2769,40 @@ body {
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.new-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147,51,234,0.6) 0%, rgba(147,51,234,0) 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.new-link.rocket-glow::before {
+  width: 120px;
+  height: 120px;
 }
 
 .new-link:hover {
   background: rgba(255,255,255,0.08);
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(147,51,234,0.3);
 }
 
 .new-link.active {
   background: rgba(96,165,250,0.18);
   border: 1px solid rgba(96,165,250,0.35);
+  box-shadow: 0 0 20px rgba(96,165,250,0.2);
 }
 
 .new-actions {
@@ -2791,10 +2823,13 @@ body {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .new-gh:hover {
   background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59,130,246,0.3);
 }
 
 .new-mobile-btn {
@@ -2830,15 +2865,41 @@ body {
   color: #fff;
   text-decoration: none;
   border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.new-mobile-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147,51,234,0.6) 0%, rgba(147,51,234,0) 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.new-mobile-link.rocket-glow::before {
+  width: 120px;
+  height: 120px;
 }
 
 .new-mobile-link:hover {
   background: rgba(255,255,255,0.08);
+  transform: translateX(8px);
+  box-shadow: 0 8px 25px rgba(147,51,234,0.2);
 }
 
 @media (max-width: 768px) {
   .new-links { display: none; }
   .new-mobile-btn { display: inline-flex; }
+  .new-nav-inner {
+    padding: 0 1rem;
+  }
 }
 
 /* Centering adjustments */
