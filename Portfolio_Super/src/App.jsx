@@ -1628,10 +1628,20 @@ export default function App() {
               transition={{ type: "spring", stiffness: 100 }}
             >
               {[
+                 { 
+                  title: 'Patch Pilot', 
+                  desc: 'Patch Pilot is an AI-powered code review system integrating with GitHub to automatically analyze pull requests and suggest fixes. Built with Spring Boot and React, it detects code issues via webhooks and generates intelligent patches. Features include one-click fixes, JWT authentication, real-time monitoring, and a modern dashboard for managing cod ', 
+                  tech: ['Spring Boot', 'TypeScript', 'AI-Powered Suggestions'],
+                  gradient: 'from-yellow to-orange',
+                  icon: Brain,
+                  github: 'https://github.com/AM4517UMOR4NG/Plagiarism-Checker',
+                  image: 'https://github.com/AM4517UMOR4NG/Patch_Pilot.git'
+                },
+
                 { 
                   title: 'Football Ticket System', 
                   desc: 'Interactive website for football ticketing using Spring Boot with many provided features', 
-                  tech: ['Spring Boot', 'JavaScript', 'MySQL'],
+                  tech: ['Spring Boot', 'JavaScript', 'h2', 'Thymeleaf'],
                   gradient: 'from-purple to-pink',
                   icon: Rocket,
                   github: 'https://github.com/AM4517UMOR4NG/Football-Ticket',
@@ -1664,6 +1674,7 @@ export default function App() {
                   github: 'https://github.com/AM4517UMOR4NG/Plagiarism-Checker',
                   image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop'
                 },
+                
               ].map((project, i) => {
                 const Icon = project.icon
                 return (
@@ -1872,25 +1883,25 @@ export default function App() {
           <div className="experience-timeline">
             {[
               { 
-                company: 'Tech Innovations Inc.', 
-                role: 'Senior Full Stack Developer', 
-                period: '2022 - Present',
-                description: 'Leading development of enterprise-scale applications and mentoring junior developers.',
-                achievements: ['Led team of 5 developers', 'Increased performance by 40%', 'Reduced deployment time by 60%']
+                company: 'Still a freshman', 
+                role: 'Start to learn coding (Java) ', 
+                period: 'Mid 2023 - Early 2024',
+                description: 'I was just learning about the basics, such a printf, for, if-else and so on',
+                achievements: ['My final projects for Alogrithm and Programming Class projects 🗿']
               },
               { 
-                company: 'Digital Solutions Agency', 
-                role: 'Full Stack Developer', 
-                period: '2020 - 2022',
-                description: 'Developed custom web applications for various clients with 100% satisfaction rate.',
-                achievements: ['Delivered 20+ projects', 'Reduced load times by 50%', 'Improved engagement by 35%']
+                company: '2nd Year University Student', 
+                role: 'Start to learn phyton and oop and data structure', 
+                period: 'Early 2024 - Mid 2024',
+                description: 'Im starting to learn Phyton and Java OOP. And a litte bit of data integration and A. I chatbox',
+                achievements: ['OOP Final Project and Structure Data Final Project 🗿']
               },
               { 
-                company: 'StartupHub', 
-                role: 'Frontend Developer', 
-                period: '2019 - 2020',
-                description: 'Built responsive interfaces for early-stage startups focusing on exceptional UX.',
-                achievements: ['Developed 5 MVP products', 'Improved engagement by 45%', 'Reduced bounce rate by 30%']
+                company: '3rd Year University Student', 
+                role: 'A. I Engineer, Software Developer, and Full Stack Developer', 
+                period: 'Mid 2025 - Present',
+                description: 'I start to learn about, sql, php, html, css, js, and so on.............. Learn framework such a Spring boot, Laravel, Djanggo, Fastify and so on. I also learn about A. I and machine learning and A. I integration (mcp, database, web scraping, and so on). I also learn about Devops and cloud computing ( docker, posgres, and so on).',
+                achievements: ['I won a competition in my university as a second place in web development competition and Create Web-App for HOLY BIBLE Online ', 'Create Government Report System ', 'Create Football Ticketing System ', 'Create Plagiarism Checker ', 'Create Patch Pilot (AI-Powered Code Review System) ']
               },
             ].map((exp, i) => (
               <motion.div
