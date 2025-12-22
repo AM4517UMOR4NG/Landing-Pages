@@ -526,7 +526,7 @@ npm run build
 npm run preview
 ```
 
-### Setup Gambar
+### Setup Image
 
 **1. Buat struktur folder:**
 ```
