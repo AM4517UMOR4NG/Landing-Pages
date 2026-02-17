@@ -2,7 +2,7 @@
 
 Koleksi landing pages modern dan responsif yang dibangun dengan React, Vite, dan TailwindCSS. Repository ini berisi berbagai template landing page untuk berbagai jenis bisnis dengan desain yang menarik dan interaktif.
 
-## 📋 Daftar Project
+## Daftar Project
 
 ### 1. 🔧 ElBengkel - Bengkel Motor & Mobil
 Landing page untuk layanan bengkel kendaraan dengan fitur lengkap dan efek 3D yang menarik.
@@ -58,17 +58,17 @@ Landing page untuk toko roti dan kue dengan tampilan yang fresh dan appetizing.
 **Lokasi:** `Landing_Pages_RotiFreeza/`
 
 **Fitur Utama:**
-- 🎯 Hero Section dengan CTA yang jelas
-- 🍰 Products Section untuk showcase produk
-- 🖼️ Gallery untuk menampilkan foto produk
-- ⭐ Features Section untuk highlight keunggulan
-- 💬 Testimonials dari pelanggan puas
-- 📞 CTA Section untuk konversi
-- 📱 Mobile-first responsive design
+-  Hero Section dengan CTA yang jelas
+-  Products Section untuk showcase produk
+-  Gallery untuk menampilkan foto produk
+-  Features Section untuk highlight keunggulan
+-  Testimonials dari pelanggan puas
+-  CTA Section untuk konversi
+-  Mobile-first responsive design
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 Semua project menggunakan teknologi modern yang sama:
 
@@ -90,7 +90,7 @@ Semua project menggunakan teknologi modern yang sama:
 
 > Koleksi 3 landing page profesional dengan desain modern, efek 3D, dan animasi halus untuk berbagai kebutuhan bisnis.
 
-## 📦 Isi Package
+## Isi Package
 
 Package ini berisi 3 landing page siap pakai:
 
@@ -147,7 +147,7 @@ http://localhost:5173
 
 ---
 
-## 📦 Available Scripts
+## Available Scripts
 
 Setiap project memiliki script yang sama:
 
@@ -189,9 +189,9 @@ npm run preview
 
 Semua landing page dioptimalkan untuk berbagai ukuran layar:
 
-- 📱 **Mobile:** 320px - 767px
-- 📱 **Tablet:** 768px - 1023px
-- 💻 **Desktop:** 1024px ke atas
+-  **Mobile:** 320px - 767px
+-  **Tablet:** 768px - 1023px
+-  **Desktop:** 1024px ke atas
 
 ---
 
