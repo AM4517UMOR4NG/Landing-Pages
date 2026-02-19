@@ -9,7 +9,7 @@ Landing page untuk layanan bengkel kendaraan dengan fitur lengkap dan efek 3D ya
 
 **Lokasi:** `Landing_Pages_ElBengkel/`
 
-**Fitur Utama:**
+**Fitur:**
 - ✨ Header & Navigation responsif dengan mobile menu
 - 🎯 Hero Section dengan animated elements dan CTA buttons
 - 🛠️ Services Section - 6 layanan utama dengan card 3D hover effects
